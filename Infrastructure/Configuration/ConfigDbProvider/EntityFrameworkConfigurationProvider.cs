@@ -18,7 +18,7 @@ namespace Infrastructure.Configuration.ConfigDbProvider
         {
             using (var dbContext = new ConfigurationDbContext(NameOrConnectionString))
             {
-                dbContext.Database.CreateIfNotExists();
+                //dbContext.Database.EnsureCreated();
                 Data = !dbContext.ConfigurationValues.Any()
                     ? CreateAndSaveDefaultValues(dbContext)
                     : dbContext.ConfigurationValues.ToDictionary(c => c.Id, c => c.Value);
