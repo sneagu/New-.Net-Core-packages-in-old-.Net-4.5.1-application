@@ -1,0 +1,14 @@
+﻿{
+  "MySettings": {
+    "ApplicationName": "My Very First MVC Application",
+    "MaxItemsPerList": 10
+  },  
+  "Logging": {
+    "IncludeScopes": false,
+    "LogLevel": {
+      "Default": "Debug",
+      "System": "Information",
+      "Microsoft": "Information"
+    }
+  }
+}

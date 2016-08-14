@@ -1,0 +1,7 @@
+﻿<appsettings>
+  <setting2>value 2 - XML</setting2>
+  <setting3>value 3 - XML</setting3>
+  <data>
+    <commandTimeout>60</commandTimeout>
+  </data>
+</appsettings>
