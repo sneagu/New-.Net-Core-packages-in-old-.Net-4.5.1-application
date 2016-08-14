@@ -3,16 +3,15 @@ using System.Web.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.Memory;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using WebApplication1.Controllers;
 
 
 namespace WebApplication1.Tests.Controllers
 {
-    [TestClass]
     public class HomeControllerTest
     {
-        [TestMethod]
+        [Fact]
         public void Contact()
         {
             var cr = new ConfigurationRoot(new List<IConfigurationProvider> {new MemoryConfigurationProvider(new MemoryConfigurationSource())});
@@ -29,7 +28,7 @@ namespace WebApplication1.Tests.Controllers
             ViewResult result = controller.Contact() as ViewResult;
 
             // Assert
-            Assert.AreEqual("keyValue1 SNeagu", result.ViewBag.Message);
+            Assert.Equal("keyValue1 SNeagu", result.ViewBag.Message);
         }
     }
 }
