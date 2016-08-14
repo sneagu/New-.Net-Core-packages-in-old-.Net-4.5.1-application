@@ -17,7 +17,7 @@ namespace WebApplication1
         public void Configuration(IAppBuilder app)
         {
             var services = new ServiceCollection();
-            //ConfigureAuth(app);
+            ConfigureAuth(app);
             ConfigureServices(services);
         }
 
