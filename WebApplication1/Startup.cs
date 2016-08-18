@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Linq;
 using System.Web.Mvc;
 using Infrastructure.Configuration.ConfigDbProvider;
+using Infrastructure.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Owin;
@@ -31,6 +32,7 @@ namespace WebApplication1
                .Where(t => typeof(IController).IsAssignableFrom(t)
                   || t.Name.EndsWith("Controller", StringComparison.OrdinalIgnoreCase)));
 
+            services.AddOptions();
             services.AddConfiguration();
 
             var resolver = new DefaultDependencyResolver(services.BuildServiceProvider());
@@ -85,6 +87,10 @@ namespace WebApplication1
                 .AddEnvironmentVariables()
                 .AddEntityFrameworkConfig(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString)
                 .Build();
+
+            // Options see config.json
+            services.Configure<MySettings>(configuration); 
+            services.Configure<OtherSettings>(configuration.GetSection("otherSettings"));
 
             // *If* you need access to generic IConfiguration this is **required**
             services.AddSingleton<IConfigurationRoot>(configuration);

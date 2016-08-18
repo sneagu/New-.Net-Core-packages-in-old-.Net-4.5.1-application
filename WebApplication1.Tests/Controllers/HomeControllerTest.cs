@@ -5,7 +5,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.Memory;
 using Xunit;
 using WebApplication1.Controllers;
-
+using Microsoft.Extensions.Options;
+using Infrastructure.Configuration;
 
 namespace WebApplication1.Tests.Controllers
 {
@@ -14,21 +15,23 @@ namespace WebApplication1.Tests.Controllers
         [Fact]
         public void Contact()
         {
-            var cr = new ConfigurationRoot(new List<IConfigurationProvider> {new MemoryConfigurationProvider(new MemoryConfigurationSource())});
-            cr["kEY1"] = "keyValue1";
-            cr["key2"] = "keyValue2";
-            cr["USERNAME"] = "SNeagu";
+            // Arrange
+            var config = new ConfigurationRoot(new List<IConfigurationProvider> {new MemoryConfigurationProvider(new MemoryConfigurationSource())});
+            config["kEY1"] = "keyValue1";
+            config["key2"] = "keyValue2";
+            config["USERNAME"] = "SNeagu";
+            var otherSettings = new OtherSettings { Numbers = new int[] { 234, 567 } };
+            var options = new OptionsWrapper<OtherSettings>(otherSettings);
             IMemoryCache cache = new MemoryCache(new MemoryCacheOptions());
 
 
-            // Arrange
-            HomeController controller = new HomeController(cr, cache);
+            HomeController controller = new HomeController(config, options, cache);
 
             // Act
             ViewResult result = controller.Contact() as ViewResult;
 
             // Assert
-            Assert.Equal("keyValue1 SNeagu", result.ViewBag.Message);
+            Assert.Equal("keyValue1 SNeagu 234, 567", result.ViewBag.Message);
         }
     }
 }

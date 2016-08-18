@@ -1,14 +1,16 @@
 ﻿{
-  "MySettings": {
-    "ApplicationName": "My Very First MVC Application",
-    "MaxItemsPerList": 10
-  },  
-  "Logging": {
-    "IncludeScopes": false,
-    "LogLevel": {
-      "Default": "Debug",
-      "System": "Information",
-      "Microsoft": "Information"
-    }
+  "dateSetting": "2016-01-14",
+  "booleanSetting": true,
+  "stringSetting": "A string value",
+
+  "objectSettings": {
+    "integerSetting": 123,
+    "decimalSetting": 456.789,
+    "dateTimeSetting": "2016-01-16T16:36:25Z"
+  },
+
+  "otherSettings": {
+    "strings": [ "foo", "bar", "baz" ],
+    "numbers": [ 123, 456, 789 ]
   }
 }

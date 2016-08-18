@@ -2,6 +2,8 @@
 using System.Web.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
+using Infrastructure.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace WebApplication1.Controllers
 {
@@ -10,11 +12,15 @@ namespace WebApplication1.Controllers
     {
 
         private IConfigurationRoot Configuration { get; set; }
+
+        public readonly OtherSettings OtherSettings;
+
         public IMemoryCache MemoryCache { get; set; }
 
-        public HomeController(IConfigurationRoot configuration, IMemoryCache memoryCache)
+        public HomeController(IConfigurationRoot configuration, IOptions<OtherSettings> otherSettings, IMemoryCache memoryCache)
         {
             Configuration = configuration;
+            OtherSettings = otherSettings.Value;
             MemoryCache = memoryCache;
         }
         public ActionResult Index()
@@ -39,7 +45,9 @@ namespace WebApplication1.Controllers
 
         public ActionResult Contact()
         {
-            ViewBag.Message = Configuration.GetValue<string>("key1") + " " + Configuration.GetValue<string>("username");
+            ViewBag.Message = Configuration.GetValue<string>("key1") + " " + 
+                Configuration.GetValue<string>("username") + " " + 
+                string.Join<int>(", ", OtherSettings.Numbers);
 
             return View();
         }

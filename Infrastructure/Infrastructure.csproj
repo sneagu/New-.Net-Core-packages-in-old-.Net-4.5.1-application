@@ -140,6 +140,9 @@
     <Compile Include="Configuration\ConfigDbProvider\EntityFrameworkExtensions.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Configuration\MySettings.cs" />
+    <Compile Include="Configuration\NestedSettings.cs" />
+    <Compile Include="Configuration\OtherSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
