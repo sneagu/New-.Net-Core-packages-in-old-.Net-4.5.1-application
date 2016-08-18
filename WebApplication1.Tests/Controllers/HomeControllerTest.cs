@@ -24,7 +24,6 @@ namespace WebApplication1.Tests.Controllers
             var options = new OptionsWrapper<OtherSettings>(otherSettings);
             IMemoryCache cache = new MemoryCache(new MemoryCacheOptions());
 
-
             HomeController controller = new HomeController(config, options, cache);
 
             // Act
