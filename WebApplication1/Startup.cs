@@ -88,7 +88,11 @@ namespace WebApplication1
                 .AddEntityFrameworkConfig(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString)
                 .Build();
 
-            // Options see config.json
+            // Options (see config.json)
+            services.Configure<MySettings>(mySettings =>
+            {
+                mySettings.DateSetting = DateTime.Today;
+            });
             services.Configure<MySettings>(configuration); 
             services.Configure<OtherSettings>(configuration.GetSection("otherSettings"));
 

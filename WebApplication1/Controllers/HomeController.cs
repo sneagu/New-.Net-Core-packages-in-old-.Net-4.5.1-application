@@ -45,8 +45,9 @@ namespace WebApplication1.Controllers
 
         public ActionResult Contact()
         {
-            ViewBag.Message = Configuration.GetValue<string>("key1") + " " + 
-                Configuration.GetValue<string>("username") + " " + 
+            //ViewBag.Message = Configuration.GetValue<string>("key1")
+            ViewBag.Message = Configuration["key1"] + " " +
+                Configuration["username"] + " " +
                 string.Join<int>(", ", OtherSettings.Numbers);
 
             return View();
