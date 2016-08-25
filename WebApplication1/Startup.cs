@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Web.Mvc;
-using Infrastructure.Configuration.ConfigDbProvider;
+using Infrastructure.Configuration.DbConfigProvider;
 using Infrastructure.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Owin;
 using Owin;
+using Microsoft.Extensions.Options;
+using Infrastructure.Configuration.ResxConfigProvider;
 
 [assembly: OwinStartupAttribute(typeof(WebApplication1.Startup))]
 namespace WebApplication1
@@ -84,8 +86,9 @@ namespace WebApplication1
                 .AddJsonFile(@"App_Data\config.json")
                 .AddJsonFile(@"App_Data\appsettings.json")
                 .AddXmlFile(@"App_Data\appsettings.xml")
-                .AddEnvironmentVariables()
                 .AddEntityFrameworkConfig(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString)
+                .AddResxFile(@"App_Data\Resource1.resx")
+                .AddEnvironmentVariables()
                 .Build();
 
             // Options (see config.json)
@@ -93,8 +96,12 @@ namespace WebApplication1
             {
                 mySettings.DateSetting = DateTime.Today;
             });
-            services.Configure<MySettings>(configuration); 
+
+            services.Configure<MySettings>(configuration);
+            //services.AddSingleton<IConfigureOptions<MySettings>>(new ConfigureFromConfigurationOptions<MySettings>(configuration));
+
             services.Configure<OtherSettings>(configuration.GetSection("otherSettings"));
+
 
             // *If* you need access to generic IConfiguration this is **required**
             services.AddSingleton<IConfigurationRoot>(configuration);

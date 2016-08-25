@@ -1,6 +1,6 @@
 ﻿using System.Data.Entity;
 
-namespace Infrastructure.Configuration.ConfigDbProvider
+namespace Infrastructure.Configuration.DbConfigProvider
 {
     public class ConfigurationDbContext : DbContext
     {

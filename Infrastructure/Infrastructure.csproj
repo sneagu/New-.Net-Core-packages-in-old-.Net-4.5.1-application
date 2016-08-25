@@ -126,6 +126,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -133,25 +134,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Configuration\ConfigDbProvider\ConfigurationDbContext.cs" />
-    <Compile Include="Configuration\ConfigDbProvider\EntityFrameworkConfigurationProvider.cs" />
-    <Compile Include="Configuration\ConfigDbProvider\EntityFrameworkConfigurationSource.cs" />
-    <Compile Include="Configuration\ConfigDbProvider\ConfigurationValue.cs" />
-    <Compile Include="Configuration\ConfigDbProvider\EntityFrameworkExtensions.cs">
+    <Compile Include="Configuration\DbConfigProvider\ConfigurationDbContext.cs" />
+    <Compile Include="Configuration\DbConfigProvider\EntityFrameworkConfigurationProvider.cs" />
+    <Compile Include="Configuration\DbConfigProvider\EntityFrameworkConfigurationSource.cs" />
+    <Compile Include="Configuration\DbConfigProvider\ConfigurationValue.cs" />
+    <Compile Include="Configuration\DbConfigProvider\EntityFrameworkExtensions.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Configuration\ResxConfigProvider\ResxConfigurationProvider.cs" />
     <Compile Include="Configuration\MySettings.cs" />
     <Compile Include="Configuration\NestedSettings.cs" />
     <Compile Include="Configuration\OtherSettings.cs" />
+    <Compile Include="Configuration\ResxConfigProvider\ResxConfigurationSource.cs" />
+    <Compile Include="Configuration\ResxConfigProvider\ResxConfigurationExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <Content Include="Configuration\ConfigDbProvider\Table.sql" />
+    <Content Include="Configuration\DbConfigProvider\Table.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
