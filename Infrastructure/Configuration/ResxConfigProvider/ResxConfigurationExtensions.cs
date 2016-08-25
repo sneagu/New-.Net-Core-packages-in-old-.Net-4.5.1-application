@@ -23,8 +23,13 @@ namespace Infrastructure.Configuration.ResxConfigProvider
             return AddResxFile(builder, provider: null, path: path, optional: optional, reloadOnChange: false);
         }
 
+        public static IConfigurationBuilder AddResxFile(this IConfigurationBuilder builder, string path, bool optional, bool reloadOnChange)
+        {
+            return AddResxFile(builder, provider: null, path: path, optional: optional, reloadOnChange: reloadOnChange);
+        }
 
-        public static IConfigurationBuilder AddResxFile(this IConfigurationBuilder builder, IFileProvider provider, 
+
+        public static IConfigurationBuilder AddResxFile(this IConfigurationBuilder builder, IFileProvider provider,
             string path, bool optional, bool reloadOnChange)
         {
             if (builder == null)

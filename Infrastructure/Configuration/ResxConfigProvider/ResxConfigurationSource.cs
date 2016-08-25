@@ -1,6 +1,4 @@
 ﻿using Microsoft.Extensions.Configuration;
-using System.IO;
-using Microsoft.Extensions.FileProviders;
 
 namespace Infrastructure.Configuration.ResxConfigProvider
 {
