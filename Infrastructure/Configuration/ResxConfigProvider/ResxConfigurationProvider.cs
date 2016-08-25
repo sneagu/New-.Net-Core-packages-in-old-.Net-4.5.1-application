@@ -8,11 +8,9 @@ namespace Infrastructure.Configuration.ResxConfigProvider
 {
     class ResxConfigurationProvider : FileConfigurationProvider
     {
-        public ResxConfigurationProvider(FileConfigurationSource source) : base(source)
-        {
-        }
+        public ResxConfigurationProvider(ResxConfigurationSource source) : base(source) {}
 
-        public override void Load()
+        public override void Load(Stream stream)
         {
             var file = Source.FileProvider.GetFileInfo(Source.Path);
             Data = XDocument
@@ -20,11 +18,6 @@ namespace Infrastructure.Configuration.ResxConfigProvider
                 .Descendants()
                 .Where(x => x.Name == "data")
                 .ToDictionary(x => x.Attribute("name").Value, x => x.Value);
-        }
-
-        public override void Load(Stream stream)
-        {
-            throw new NotImplementedException();
         }
     }
 }
