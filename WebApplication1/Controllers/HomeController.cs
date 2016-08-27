@@ -45,12 +45,24 @@ namespace WebApplication1.Controllers
 
         public ActionResult Contact()
         {
-            //ViewBag.Message = Configuration.GetValue<string>("key1")
+            // The recommended way
             ViewBag.Message = Configuration["key1"] + " " +
                 Configuration["username"] + " " +
                 string.Join<int>(", ", OtherSettings.Numbers);
 
+            // Using GetValue (strong typet)
+            ViewBag.Message = Configuration.GetValue<string>("username");
+
+            // Service locator
+            var config = DependencyResolver.Current.GetService(typeof(IConfigurationRoot)) as IConfigurationRoot;
+            ViewBag.Message = config["username"];
+
+            // Dynamic Bind
+            var otherSettings = new OtherSettings();
+            Configuration.GetSection("OtherSettings").Bind(otherSettings);
+
             return View();
         }
     }
+    
 }
