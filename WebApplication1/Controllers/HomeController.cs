@@ -4,6 +4,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Infrastructure.Configuration;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Logging;
 
 namespace WebApplication1.Controllers
 {
@@ -11,22 +12,35 @@ namespace WebApplication1.Controllers
     public class HomeController : Controller
     {
 
-        private IConfigurationRoot Configuration { get; set; }
+        IConfigurationRoot _configuration;
 
-        public readonly OtherSettings OtherSettings;
+        OtherSettings _otherSettings;
 
-        public IMemoryCache MemoryCache { get; set; }
+        ILogger _logger;
 
-        public HomeController(IConfigurationRoot configuration, IOptions<OtherSettings> otherSettings, IMemoryCache memoryCache)
+        IMemoryCache _memoryCache;
+
+        public HomeController(IConfigurationRoot configuration, IOptions<OtherSettings> otherSettings, ILogger<HomeController> logger, IMemoryCache memoryCache)
         {
-            Configuration = configuration;
-            OtherSettings = otherSettings.Value;
-            MemoryCache = memoryCache;
+            _configuration = configuration;
+            _otherSettings = otherSettings.Value;
+            _logger = logger;
+            _memoryCache = memoryCache;
         }
         public ActionResult Index()
         {
+            _logger.LogInformation("Hello Logger!");
+            try
+            {
+                throw new Exception("By purpose");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(1, ex, "Exception message");
+            }
+
             var time = DateTime.Now.ToLocalTime().ToString();
-            MemoryCache.Set("Time", time,
+            _memoryCache.Set("Time", time,
                 new MemoryCacheEntryOptions()
                 {
                     AbsoluteExpirationRelativeToNow = (DateTime.Now.AddMinutes(1) - DateTime.Now)
@@ -38,7 +52,7 @@ namespace WebApplication1.Controllers
         public ActionResult About()
         {
             string time = null;
-            ViewBag.Message = MemoryCache.TryGetValue("Time", out time) ? time : DateTime.Now.ToLocalTime().ToString();
+            ViewBag.Message = _memoryCache.TryGetValue("Time", out time) ? time : DateTime.Now.ToLocalTime().ToString();
 
             return View();
         }
@@ -46,9 +60,9 @@ namespace WebApplication1.Controllers
         public ActionResult Contact()
         {
             // The recommended way
-            ViewBag.Message = Configuration["key1"] + " " +
-                Configuration["username"] + " " +
-                string.Join<int>(", ", OtherSettings.Numbers);
+            ViewBag.Message = _configuration["key1"] + " " +
+                _configuration["username"] + " " +
+                string.Join<int>(", ", _otherSettings.Numbers);
 
             //// Service locator
             //var config = DependencyResolver.Current.GetService(typeof(IConfigurationRoot)) as IConfigurationRoot;

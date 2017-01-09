@@ -7,6 +7,7 @@ using Xunit;
 using WebApplication1.Controllers;
 using Microsoft.Extensions.Options;
 using Infrastructure.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace WebApplication1.Tests.Controllers
 {
@@ -22,9 +23,11 @@ namespace WebApplication1.Tests.Controllers
             config["USERNAME"] = "SNeagu";
             var otherSettings = new OtherSettings { Numbers = new int[] { 234, 567 } };
             var options = new OptionsWrapper<OtherSettings>(otherSettings);
+            var loggerFactory = new LoggerFactory();
+            var logger = loggerFactory.CreateLogger<HomeController>();
             IMemoryCache cache = new MemoryCache(new MemoryCacheOptions());
 
-            HomeController controller = new HomeController(config, options, cache);
+            HomeController controller = new HomeController(config, options, logger, cache);
 
             // Act
             ViewResult result = controller.Contact() as ViewResult;

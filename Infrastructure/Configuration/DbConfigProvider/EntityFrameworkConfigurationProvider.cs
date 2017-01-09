@@ -7,16 +7,16 @@ namespace Infrastructure.Configuration.DbConfigProvider
 {
     public class EntityFrameworkConfigurationProvider : ConfigurationProvider
     {
+        string _nameOrConnectionString;
+
         public EntityFrameworkConfigurationProvider(string nameOrConnectionString)
         {
-            NameOrConnectionString = nameOrConnectionString;
+            _nameOrConnectionString = nameOrConnectionString;
         }
-
-        private string NameOrConnectionString { get; set; }
 
         public override void Load()
         {
-            using (var dbContext = new ConfigurationDbContext(NameOrConnectionString))
+            using (var dbContext = new ConfigurationDbContext(_nameOrConnectionString))
             {
                 //dbContext.Database.EnsureCreated();
                 dbContext.Database.CreateIfNotExists();

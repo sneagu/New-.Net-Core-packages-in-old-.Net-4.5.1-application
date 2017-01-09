@@ -11,6 +11,8 @@ using Microsoft.Owin;
 using Owin;
 using Microsoft.Extensions.Options;
 using Infrastructure.Configuration.ResxConfigProvider;
+using Microsoft.Extensions.Logging;
+using Infrastructure.Logging.DbLoggerProvider;
 
 [assembly: OwinStartupAttribute(typeof(WebApplication1.Startup))]
 namespace WebApplication1
@@ -36,6 +38,22 @@ namespace WebApplication1
 
             services.AddOptions();
             services.AddConfiguration();
+
+            ILoggerFactory loggerFactory = new LoggerFactory();
+            loggerFactory
+                .WithFilter(
+                    new FilterLoggerSettings
+                    {
+                        { "Microsoft", LogLevel.None },
+                        { "System", LogLevel.None },
+                        { "WebApplication1.Controllers.HomeController", LogLevel.Debug }
+                    })
+                .AddConsole()
+                .AddDebug()
+                .AddEntityFramework<LoggingDbContext, Log>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString/*serviceProvider*/
+                    , (_, logLevel) => logLevel >= LogLevel.Error);
+            services.AddSingleton(loggerFactory); // Add first my already configured instance
+            services.AddLogging(); // Allow ILogger<T>
 
             var resolver = new DefaultDependencyResolver(services.BuildServiceProvider());
             DependencyResolver.SetResolver(resolver);
