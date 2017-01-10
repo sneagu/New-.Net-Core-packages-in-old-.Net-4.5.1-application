@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Logging.DbLoggerProvider
 {
-    public class EntityFrameworkLogger<TDbContext, TLog> : ILogger 
+    public class EntityFrameworkLogger<TDbContext, TLog> : ILogger
         where TLog : Log, new()
         where TDbContext : DbContext
     {
@@ -32,7 +32,7 @@ namespace Infrastructure.Logging.DbLoggerProvider
             }
 
             _name = name ?? string.Empty;
-            _filter = filter;// ?? GetFilter(serviceProvider.GetService<IOptions<EntityFrameworkLoggerOptions>>());
+            _filter = filter ?? ((category, logLevel) => true);// ?? GetFilter(serviceProvider.GetService<IOptions<EntityFrameworkLoggerOptions>>());
             // _serviceProvider = serviceProvider;
             _nameOrConnectionString = nameOrConnectionString;
         }
@@ -83,17 +83,17 @@ namespace Infrastructure.Logging.DbLoggerProvider
 
             string message = formatter(state, exception);
 
-            if (string.IsNullOrEmpty(message))
+            if (string.IsNullOrEmpty(message) && exception == null)
             {
                 return;
             }
 
             message = $"{message}";
 
-            if (exception != null)
-            {
-                message += $"{Environment.NewLine}{Environment.NewLine}{exception}";
-            }
+            //if (exception != null)
+            //{
+            //    message += $"{Environment.NewLine}{Environment.NewLine}{exception}";
+            //}
 
             WriteMessage(message, logLevel, eventId.Id, exception);
         }
@@ -119,7 +119,7 @@ namespace Infrastructure.Logging.DbLoggerProvider
                     Message = Trim(message, DbLoggerProvider.Log.MaximumMessageLength),
                     Date = DateTime.UtcNow,
                     Level = logLevel.ToString(),
-                    Logger = _name.Length > 255 ? _name.Substring(0, 255) : _name,
+                    Logger = Trim(_name, 255),
                     Thread = eventId.ToString()
                 };
 
@@ -127,7 +127,7 @@ namespace Infrastructure.Logging.DbLoggerProvider
                     log.Exception = Trim(exception.ToString(), DbLoggerProvider.Log.MaximumExceptionLength);
 
                 // TODO: Get the username
-                log.Username = null;
+                log.Username = System.Web.HttpContext.Current.User.ToString();
 
                 context.Set<TLog>().Add(log);
 

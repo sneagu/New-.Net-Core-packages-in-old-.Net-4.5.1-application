@@ -39,22 +39,6 @@ namespace WebApplication1
             services.AddOptions();
             services.AddConfiguration();
 
-            ILoggerFactory loggerFactory = new LoggerFactory();
-            loggerFactory
-                .WithFilter(
-                    new FilterLoggerSettings
-                    {
-                        { "Microsoft", LogLevel.None },
-                        { "System", LogLevel.None },
-                        { "WebApplication1.Controllers.HomeController", LogLevel.Debug }
-                    })
-                .AddConsole()
-                .AddDebug()
-                .AddEntityFramework<LoggingDbContext, Log>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString/*serviceProvider*/
-                    , (_, logLevel) => logLevel >= LogLevel.Error);
-            services.AddSingleton(loggerFactory); // Add first my already configured instance
-            services.AddLogging(); // Allow ILogger<T>
-
             var resolver = new DefaultDependencyResolver(services.BuildServiceProvider());
             DependencyResolver.SetResolver(resolver);
         }
@@ -123,6 +107,25 @@ namespace WebApplication1
 
             // *If* you need access to generic IConfiguration this is **required**
             services.AddSingleton<IConfigurationRoot>(configuration);
+
+            // Logging
+            ILoggerFactory loggerFactory = new LoggerFactory();
+            loggerFactory
+                .WithFilter(
+                    new FilterLoggerSettings
+                    {
+                        { "Microsoft", LogLevel.None },
+                        { "System", LogLevel.None },
+                        { "WebApplication1.Controllers.HomeController", LogLevel.Information }
+                    })
+                .AddConsole(configuration.GetSection("Logging"))
+                //.AddDebug()
+                //.AddEntityFramework<LoggingDbContext, Log>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString/*serviceProvider*/
+                //    , (_, logLevel) => logLevel >= LogLevel.Error);
+                .AddEntityFramework<LoggingDbContext, Log>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString/*serviceProvider*/
+                    , configuration.GetSection("Logging"));
+            services.AddSingleton(loggerFactory); // Add first my already configured instance
+            services.AddLogging(); // Allow ILogger<T>
 
             return services;
         }
