@@ -243,3 +243,5 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+/WebApplication1.sln.new
+/WebApplication1.rar

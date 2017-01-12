@@ -154,12 +154,14 @@
     <Compile Include="Configuration\OtherSettings.cs" />
     <Compile Include="Configuration\ResxConfigProvider\ResxConfigurationSource.cs" />
     <Compile Include="Configuration\ResxConfigProvider\ResxConfigurationExtensions.cs" />
+    <Compile Include="ISampleService.cs" />
     <Compile Include="Logging\DbLoggerProvider\LoggingDbContext.cs" />
     <Compile Include="Logging\DbLoggerProvider\EntityFrameworkLogger.cs" />
     <Compile Include="Logging\DbLoggerProvider\EntityFrameworkLoggerFactoryExtensions.cs" />
     <Compile Include="Logging\DbLoggerProvider\EntityFrameworkLoggerProvider.cs" />
     <Compile Include="Logging\DbLoggerProvider\Log.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SampleService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
