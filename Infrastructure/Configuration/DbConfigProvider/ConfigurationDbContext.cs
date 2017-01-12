@@ -7,6 +7,7 @@ namespace Infrastructure.Configuration.DbConfigProvider
         public ConfigurationDbContext(string nameOrConnectionString)
             : base(nameOrConnectionString)
         {
+            //Database.SetInitializer<ConfigurationDbContext>(null);
         }
 
         public DbSet<ConfigurationValue> ConfigurationValues { get; set; }

@@ -1,19 +1,15 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
-using System.Data.Entity;
 using Microsoft.Extensions.Logging.Console;
 using System.Collections.Generic;
 
 namespace Infrastructure.Logging.DbLoggerProvider
 {
-    public class EntityFrameworkLoggerProvider<TDbContext, TLog> : ILoggerProvider 
-        where TLog : Log, new()
-        where TDbContext : DbContext
+    public class EntityFrameworkLoggerProvider : ILoggerProvider
     {
+        readonly string _nameOrConnectionString;
         readonly Func<string, LogLevel, bool> _filter;
-        private IConsoleLoggerSettings _settings;
-        //readonly IServiceProvider _serviceProvider;
-        string _nameOrConnectionString;
+        private readonly IConsoleLoggerSettings _settings;
 
         public EntityFrameworkLoggerProvider(string nameOrConnectionString, IConsoleLoggerSettings settings)
         {
@@ -21,13 +17,12 @@ namespace Infrastructure.Logging.DbLoggerProvider
             _settings = settings;
         }
 
-        public EntityFrameworkLoggerProvider(string nameOrConnectionString/*IServiceProvider serviceProvider*/, Func<string, LogLevel, bool> filter)
+        public EntityFrameworkLoggerProvider(string nameOrConnectionString, Func<string, LogLevel, bool> filter)
         {
             _filter = filter;
-            //_serviceProvider = serviceProvider;
             _nameOrConnectionString = nameOrConnectionString;
 
-            _settings = new ConsoleLoggerSettings()
+            _settings = new ConsoleLoggerSettings
             {
                 IncludeScopes = false,
             };
@@ -35,7 +30,7 @@ namespace Infrastructure.Logging.DbLoggerProvider
 
         public ILogger CreateLogger(string name)
         {
-            return new EntityFrameworkLogger<TDbContext, TLog>(name, GetFilter(name, _settings), _nameOrConnectionString /*_serviceProvider*/);
+            return new EntityFrameworkLogger(name, GetFilter(name, _settings), _nameOrConnectionString);
         }
 
         private Func<string, LogLevel, bool> GetFilter(string name, IConsoleLoggerSettings settings)

@@ -10,21 +10,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{F1593405-2690-4B33-A835-B83FC1884D6D}"
 EndProject
 Global
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 4
-		SccEnterpriseProvider = {E56E3660-6FAB-4906-997F-F7DBBE809D88}
-		SccTeamFoundationServer = https://tfs
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = WebApplication1.Tests\\WebApplication1.Tests.csproj
-		SccProjectName1 = WebApplication1.Tests
-		SccLocalPath1 = WebApplication1.Tests
-		SccProjectUniqueName2 = WebApplication1\\WebApplication1.csproj
-		SccProjectName2 = WebApplication1
-		SccLocalPath2 = WebApplication1
-		SccProjectUniqueName3 = Infrastructure\\Infrastructure.csproj
-		SccProjectName3 = Infrastructure
-		SccLocalPath3 = Infrastructure
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU

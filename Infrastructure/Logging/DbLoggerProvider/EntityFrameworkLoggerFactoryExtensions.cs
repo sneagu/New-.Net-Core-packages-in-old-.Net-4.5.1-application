@@ -8,27 +8,37 @@ namespace Infrastructure.Logging.DbLoggerProvider
 {
     public static class EntityFrameworkLoggerFactoryExtensions
     {
-        public static ILoggerFactory AddEntityFramework<TDbContext, TLog>(this ILoggerFactory factory, string nameOrConnectionString/*IServiceProvider serviceProvider*/
-            , Func<string, LogLevel, bool> filter = null)
-            where TDbContext : DbContext
-            where TLog : Log, new()
+        public static ILoggerFactory AddEntityFramework(this ILoggerFactory factory, string nameOrConnectionString, Func<string, LogLevel, bool> filter = null)
         {
             if (factory == null) throw new ArgumentNullException("factory");
 
-            factory.AddProvider(new EntityFrameworkLoggerProvider<TDbContext, TLog>(nameOrConnectionString/*serviceProvider*/, filter));
+            if (string.IsNullOrEmpty(nameOrConnectionString))
+            {
+                throw new ArgumentNullException("nameOrConnectionString");
+            }
+
+
+            factory.AddProvider(new EntityFrameworkLoggerProvider(nameOrConnectionString, filter));
 
             return factory;
         }
 
-        public static ILoggerFactory AddEntityFramework<TDbContext, TLog>(this ILoggerFactory factory, string nameOrConnectionString
-            , IConfiguration configuration)
-            where TDbContext : DbContext
-            where TLog : Log, new()
+        public static ILoggerFactory AddEntityFramework(this ILoggerFactory factory, string nameOrConnectionString, LogLevel minLevel)
+        {
+            return AddEntityFramework(factory, nameOrConnectionString, (_, logLevel) => logLevel >= minLevel);
+        }
+
+        public static ILoggerFactory AddEntityFramework(this ILoggerFactory factory, string nameOrConnectionString, IConfiguration configuration)
         {
             if (factory == null) throw new ArgumentNullException("factory");
 
+            if (string.IsNullOrEmpty(nameOrConnectionString))
+            {
+                throw new ArgumentNullException("nameOrConnectionString");
+            }
+
             var settings = new ConfigurationConsoleLoggerSettings(configuration);
-            factory.AddProvider(new EntityFrameworkLoggerProvider<TDbContext, TLog>(nameOrConnectionString, settings));
+            factory.AddProvider(new EntityFrameworkLoggerProvider(nameOrConnectionString, settings));
 
             return factory;
         }

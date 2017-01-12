@@ -29,7 +29,11 @@ namespace WebApplication1.Controllers
         }
         public ActionResult Index()
         {
-            _logger.LogInformation("Hello Logger!");
+            // Logging Information
+            string userName = "Sorin";
+            string lastName = "Neagu";
+            _logger.LogInformation("Hello Logger! {userName} {lastName}", userName, lastName);
+            // Logging Error (Exception)
             try
             {
                 throw new Exception("By purpose");
@@ -38,7 +42,11 @@ namespace WebApplication1.Controllers
             {
                 _logger.LogError(1, ex, "Exception message");
             }
+            // Logging Critical
+            _logger.LogCritical("This is Critical logging!!!");
 
+
+            // Memory Cache start
             var time = DateTime.Now.ToLocalTime().ToString();
             _memoryCache.Set("Time", time,
                 new MemoryCacheEntryOptions()

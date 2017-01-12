@@ -7,6 +7,7 @@ namespace Infrastructure.Logging.DbLoggerProvider
         public LoggingDbContext(string nameOrConnectionString)
             : base(nameOrConnectionString)
         {
+            //Database.SetInitializer<LoggingDbContext>(null);
         }
 
         public DbSet<Log> Logs { get; set; }

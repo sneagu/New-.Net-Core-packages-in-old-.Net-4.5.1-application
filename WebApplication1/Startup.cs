@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Web.Mvc;
-using Infrastructure.Configuration.DbConfigProvider;
-using Infrastructure.Configuration;
+using Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Owin;
@@ -12,13 +11,19 @@ using Owin;
 using Microsoft.Extensions.Options;
 using Infrastructure.Configuration.ResxConfigProvider;
 using Microsoft.Extensions.Logging;
+using Infrastructure.Configuration;
+using Infrastructure.Configuration.DbConfigProvider;
 using Infrastructure.Logging.DbLoggerProvider;
+using Infrastructure.Logging.EmailLoggerProvider;
 
 [assembly: OwinStartupAttribute(typeof(WebApplication1.Startup))]
 namespace WebApplication1
 {
     public partial class Startup
     {
+        private IConfigurationRoot _config;
+        private IServiceProvider _serviceProvider;
+
         public void Configuration(IAppBuilder app)
         {
             var services = new ServiceCollection();
@@ -37,9 +42,14 @@ namespace WebApplication1
                   || t.Name.EndsWith("Controller", StringComparison.OrdinalIgnoreCase)));
 
             services.AddOptions();
-            services.AddConfiguration();
+            services.AddLogging();
+            _config = services.AddConfiguration();
+            services.AddAppDependencies();
 
-            var resolver = new DefaultDependencyResolver(services.BuildServiceProvider());
+            _serviceProvider = services.BuildServiceProvider();
+            _serviceProvider.AddLogging(_config);
+
+            var resolver = new DefaultDependencyResolver(_serviceProvider);
             DependencyResolver.SetResolver(resolver);
         }
     }
@@ -77,7 +87,7 @@ namespace WebApplication1
             return services;
         }
 
-        public static IServiceCollection AddConfiguration(this IServiceCollection services)
+        public static IConfigurationRoot AddConfiguration(this IServiceCollection services)
         {
             // Configuration
             var configuration = new ConfigurationBuilder()
@@ -85,6 +95,7 @@ namespace WebApplication1
                 {
                     { "username", "Guest" }
                 })
+                //.AddConfigFile(AppDomain.CurrentDomain.SetupInformation.ConfigurationFile)
                 .AddJsonFile(@"App_Data\config.json")
                 .AddJsonFile(@"App_Data\appsettings.json")
                 .AddXmlFile(@"App_Data\appsettings.xml")
@@ -108,8 +119,33 @@ namespace WebApplication1
             // *If* you need access to generic IConfiguration this is **required**
             services.AddSingleton<IConfigurationRoot>(configuration);
 
-            // Logging
-            ILoggerFactory loggerFactory = new LoggerFactory();
+            //// Logging
+            //// Note: WithFilter has priority over configuration settings
+            //ILoggerFactory loggerFactory = new LoggerFactory();
+            //loggerFactory
+            //    .WithFilter(
+            //        new FilterLoggerSettings
+            //        {
+            //            { "Microsoft", LogLevel.None },
+            //            { "System", LogLevel.None },
+            //            { "WebApplication1.Controllers.HomeController", LogLevel.Information }
+            //        })
+            //    .AddConsole(configuration.GetSection("Logging"))
+            //    //.AddDebug()
+            //    //.AddEntityFramework(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString) // filter = null
+            //    //.AddEntityFramework(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString, (_, logLevel) => logLevel >= LogLevel.Error);
+            //    .AddEntityFramework(configuration["ConnectionStrings:DefaultConnection"], configuration.GetSection("Logging"))
+            //    .AddEmail(/*mailService, */LogLevel.Critical); // TODO: How to inject email service?            
+            //services.AddSingleton(loggerFactory); // Add first my already configured instance
+            //services.AddLogging(); // Allow ILogger<T>
+
+            return configuration;
+        }
+
+        public static IServiceProvider AddLogging(this IServiceProvider serviceProvider, IConfigurationRoot configuration)
+        {
+            var loggerFactory = serviceProvider.GetService<ILoggerFactory>();
+            var mailService = serviceProvider.GetService<IMailService>();
             loggerFactory
                 .WithFilter(
                     new FilterLoggerSettings
@@ -119,13 +155,18 @@ namespace WebApplication1
                         { "WebApplication1.Controllers.HomeController", LogLevel.Information }
                     })
                 .AddConsole(configuration.GetSection("Logging"))
-                //.AddDebug()
-                //.AddEntityFramework<LoggingDbContext, Log>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString/*serviceProvider*/
-                //    , (_, logLevel) => logLevel >= LogLevel.Error);
-                .AddEntityFramework<LoggingDbContext, Log>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString/*serviceProvider*/
-                    , configuration.GetSection("Logging"));
-            services.AddSingleton(loggerFactory); // Add first my already configured instance
-            services.AddLogging(); // Allow ILogger<T>
+                .AddDebug()
+                //.AddEntityFramework(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString) // filter = null
+                //.AddEntityFramework(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString, (_, logLevel) => logLevel >= LogLevel.Error);
+                .AddEntityFramework(configuration["ConnectionStrings:DefaultConnection"], configuration.GetSection("Logging"))
+                .AddEmail(mailService, LogLevel.Critical); // TODO: How to inject email service?  
+
+            return serviceProvider;
+        }
+
+        public static IServiceCollection AddAppDependencies(this IServiceCollection services)
+        {
+            services.AddTransient<IMailService, MailService>();
 
             return services;
         }
