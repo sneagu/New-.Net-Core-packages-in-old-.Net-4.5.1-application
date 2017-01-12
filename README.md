@@ -6,7 +6,7 @@ Contains examples of custom providers:
 - Resx Configuration Provider (ResxConfigurationProvider)
 - Config File Configuration Provider (ConfigFileConfigurationProvider)
 - Database Logging Provider (EntityFrameworkLoggerProvider)
-- Email Logging Provider (EntityFrameworkLoggerProvider)
+- Email Logging Provider (EmailLoggerProvider)
 
 ## Blog posts
 
