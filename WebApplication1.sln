@@ -12,8 +12,8 @@ EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
 		SccNumberOfProjects = 4
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://corptfs13.jhatfs.com/tfs/jha5
+		SccEnterpriseProvider = {E56E3660-6FAB-4906-997F-F7DBBE809D88}
+		SccTeamFoundationServer = https://tfs
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = WebApplication1.Tests\\WebApplication1.Tests.csproj
 		SccProjectName1 = WebApplication1.Tests
