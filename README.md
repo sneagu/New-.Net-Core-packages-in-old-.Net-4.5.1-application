@@ -4,7 +4,7 @@ Example of integrating .Net Core NuGet packages (DI, Configuration, Options, Log
 Contains examples of custom providers:
 - Database Configuration Provider (EntityFrameworkConfigurationProvider)
 - Resx Configuration Provider (ResxConfigurationProvider)
-= Config File Configuration Provider (ConfigFileConfigurationProvider)
+- Config File Configuration Provider (ConfigFileConfigurationProvider)
 - Database Logging Provider (EntityFrameworkLoggerProvider)
 - Email Logging Provider (EntityFrameworkLoggerProvider)
 
