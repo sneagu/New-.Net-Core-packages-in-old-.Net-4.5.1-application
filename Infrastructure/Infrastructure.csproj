@@ -145,6 +145,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\ConfigFileConfigProvider\ConfigFileConfigurationExtensions.cs" />
+    <Compile Include="Configuration\ConfigFileConfigProvider\ConfigFileConfigurationProvider.cs" />
+    <Compile Include="Configuration\ConfigFileConfigProvider\ConfigFileConfigurationSource.cs" />
+    <Compile Include="Configuration\ConfigFileConfigProvider\ConfigurationAction.cs" />
+    <Compile Include="Configuration\ConfigFileConfigProvider\IConfigurationParser.cs" />
+    <Compile Include="Configuration\ConfigFileConfigProvider\KeyValueParser.cs" />
     <Compile Include="Configuration\DbConfigProvider\ConfigurationDbContext.cs" />
     <Compile Include="Configuration\DbConfigProvider\EntityFrameworkConfigurationProvider.cs" />
     <Compile Include="Configuration\DbConfigProvider\EntityFrameworkConfigurationSource.cs" />

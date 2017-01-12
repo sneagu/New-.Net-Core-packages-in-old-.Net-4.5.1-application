@@ -119,26 +119,6 @@ namespace WebApplication1
             // *If* you need access to generic IConfiguration this is **required**
             services.AddSingleton<IConfigurationRoot>(configuration);
 
-            //// Logging
-            //// Note: WithFilter has priority over configuration settings
-            //ILoggerFactory loggerFactory = new LoggerFactory();
-            //loggerFactory
-            //    .WithFilter(
-            //        new FilterLoggerSettings
-            //        {
-            //            { "Microsoft", LogLevel.None },
-            //            { "System", LogLevel.None },
-            //            { "WebApplication1.Controllers.HomeController", LogLevel.Information }
-            //        })
-            //    .AddConsole(configuration.GetSection("Logging"))
-            //    //.AddDebug()
-            //    //.AddEntityFramework(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString) // filter = null
-            //    //.AddEntityFramework(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString, (_, logLevel) => logLevel >= LogLevel.Error);
-            //    .AddEntityFramework(configuration["ConnectionStrings:DefaultConnection"], configuration.GetSection("Logging"))
-            //    .AddEmail(/*mailService, */LogLevel.Critical); // TODO: How to inject email service?            
-            //services.AddSingleton(loggerFactory); // Add first my already configured instance
-            //services.AddLogging(); // Allow ILogger<T>
-
             return configuration;
         }
 
@@ -157,9 +137,10 @@ namespace WebApplication1
                 .AddConsole(configuration.GetSection("Logging"))
                 .AddDebug()
                 //.AddEntityFramework(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString) // filter = null
+                //.AddEntityFramework(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString, LogLevel.Error)
                 //.AddEntityFramework(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString, (_, logLevel) => logLevel >= LogLevel.Error);
                 .AddEntityFramework(configuration["ConnectionStrings:DefaultConnection"], configuration.GetSection("Logging"))
-                .AddEmail(mailService, LogLevel.Critical); // TODO: How to inject email service?  
+                .AddEmail(mailService, LogLevel.Critical);
 
             return serviceProvider;
         }
