@@ -20,10 +20,36 @@ namespace Infrastructure.Services
             _logger = logger;
         }
 
-        public async Task SendMail( /*string template, string name, string email, string subject,*/ string msg)
+        public async Task SendMail(string template, string name, string email, string subject, string msg)
         {
-            //var x = new HttpClient();
-            _logger.LogError("Email sent: ", msg);
+            _logger.LogError("Sending email: ", msg);
+
+            //try
+            //{
+            //    var uri = $"https://api.sendgrid.com/api/mail.send.json";
+            //    var post = new KeyValuePair<string, string>[]
+            //          {
+            //                new KeyValuePair<string, string>("api_user", _config["MailService:ApiUser"]),
+            //                new KeyValuePair<string, string>("api_key", _config["MailService:ApiKey"]),
+            //                new KeyValuePair<string, string>("to", _config["MailService:Receiver"]),
+            //                new KeyValuePair<string, string>("toname", name),
+            //                new KeyValuePair<string, string>("subject", "Mail Message from GitHub repo"),
+            //                new KeyValuePair<string, string>("text", msg ), //string.Format(body, email, name, subject, msg)),
+            //                new KeyValuePair<string, string>("from", _config["MailService:Receiver"])
+            //          };
+
+            //    var client = new HttpClient();
+            //    var response = await client.PostAsync(uri, new FormUrlEncodedContent(post));
+            //    if (!response.IsSuccessStatusCode)
+            //    {
+            //        var result = await response.Content.ReadAsStringAsync();
+            //        _logger.LogError($"Failed to send message via SendGrid: {Environment.NewLine}Body: {post}{Environment.NewLine}Result: {result}");
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    _logger.LogError("Exception Thrown sending message via SendGrid", ex);
+            //}
         }
     }
 }

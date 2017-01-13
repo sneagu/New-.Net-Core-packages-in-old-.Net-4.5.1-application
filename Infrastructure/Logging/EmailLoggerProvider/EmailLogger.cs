@@ -44,7 +44,7 @@ namespace Infrastructure.Logging.EmailLoggerProvider
                 message += Environment.NewLine + Environment.NewLine + exception.ToString();
             }
 
-            _mailService.SendMail(/*"logmessage.txt", "Shawn Wildermuth", "shawn@wildermuth.com", "[WilderBlog Log Message]", */message);
+            _mailService.SendMail("logmessage.txt", "Sorin Neagu", "sorin@neagu.com", "[GitHub Repo Log Message]", message);
 
         }
 
